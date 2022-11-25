@@ -23,15 +23,89 @@
 
 #include "raylib.h"
 
+#include <vector>
 #include <stack>
 
-enum class state
+
+
+class Player 
+{
+
+};
+
+class Asteroid
+{
+
+};
+
+class Projectile
+{
+
+};
+
+
+class Level
+{
+    std::vector<Asteroid> asteroids;
+    std::vector<Projectile> projectiles;
+    Player player;
+
+    void update() {
+
+    }
+
+    void render() {
+
+    }
+
+
+
+};
+
+
+
+
+
+
+
+
+enum class State
 {
     MAIN_MENU,
     GAME
 };
 
-std::stack<state> states;
+std::stack<State> states;
+
+
+void do_main_menu() 
+{
+    Vector2 mouse_pos = GetMousePosition();
+    
+    //Title
+    int title_font = 32;
+    int title_x = (GetScreenWidth() / 2) - 32;
+    int title_y = (GetScreenHeight() * 0.25);
+    DrawText("ASTEROID CLONE", title_x, title_y, title_font, RED);
+
+    //Button
+    int pos_x = GetScreenWidth() / 2;
+    int pos_y = (GetScreenHeight() / 2) - 124;
+    DrawRectangle(pos_x, pos_y, 124, 64, GREEN);
+
+    Rectangle btnbounds(pos_x, pos_y, 124, 64);
+    
+    bool btn_action = false;
+
+    if (CheckCollisionPointRec(mouse_pos, btnbounds))
+    {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            states.push(State::GAME);
+        }
+    }
+}
+
+
 
 
 //------------------------------------------------------------------------------------
@@ -42,12 +116,16 @@ int main(void)
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenHeight = 800;
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
+
+
+    states.push(State::MAIN_MENU);
+
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -56,14 +134,32 @@ int main(void)
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
+        
+        State current_state = states.top();
+        
+        switch (current_state)
+        {
+        case State::MAIN_MENU:
+            do_main_menu();
+            break;
+        case State::GAME:
+            //do_game(level)
+            break;
+        }
+
+
+
+
+
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(DARKGRAY);
+        
 
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

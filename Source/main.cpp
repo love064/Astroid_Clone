@@ -23,6 +23,17 @@
 
 #include "raylib.h"
 
+#include <stack>
+
+enum class state
+{
+    MAIN_MENU,
+    GAME
+};
+
+std::stack<state> states;
+
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -65,3 +76,7 @@ int main(void)
 
     return 0;
 }
+
+
+
+

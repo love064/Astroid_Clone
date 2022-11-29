@@ -27,10 +27,41 @@
 #include <vector>
 #include <stack>
 
+const float PLAYER_SIZE = 20.0f;
+const float PLAYER_SPEED = 6.0f;
+const int PLAYER_MAX_SHOTS = 5;
+
+const int ASTEROIDS_SPEED = 2;
+const int MAX_BIG_ASTEROIDS = 4;
+const int MAX_MID_ASTEROIDS = 8;
+const int MAX_MINI_ASTEROOIDS = 16;
+
 
 //Entity code
 class Player 
 {
+public:
+    Vector2 position;
+    Vector2 speed;
+    Vector2 direction;
+    int acceleration;
+    int rotation;
+    int health = 1;
+
+    bool destroyed = false;
+
+    void update()
+    {
+        position.x += (speed.x * acceleration);
+        position.y -= (speed.y * acceleration);
+
+        speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
+        speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
+    }
+    void render()
+    {
+
+    }
 
 };
 

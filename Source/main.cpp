@@ -27,7 +27,7 @@
 #include <stack>
 
 
-
+//Entity code
 class Player 
 {
 
@@ -40,10 +40,24 @@ class Asteroid
 
 class Projectile
 {
+    Vector2 position;
+    Vector2 direction;
+
+    int health;
+    bool isdead = false;
+
+    void kill() {
+
+    }
+
+    void update() {
+
+    }
 
 };
 
 
+//Level code
 class Level
 {
     std::vector<Asteroid> asteroids;
@@ -59,7 +73,6 @@ class Level
     }
 
 
-
 };
 
 
@@ -68,7 +81,7 @@ class Level
 
 
 
-
+//Menu code
 enum class State
 {
     MAIN_MENU,
@@ -77,8 +90,7 @@ enum class State
 
 std::stack<State> states;
 
-
-void do_main_menu() 
+void do_main_menu() //Main Menu 
 {
     Vector2 mouse_pos = GetMousePosition();
     

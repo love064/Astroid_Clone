@@ -18,22 +18,28 @@
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Level.cpp">
+    <ClCompile Include="Source\Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entities.cpp">
+    <ClCompile Include="Source\My_Maths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Level.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\Level.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\My_Maths.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\Constants.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entities.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

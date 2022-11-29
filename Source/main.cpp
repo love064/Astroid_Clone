@@ -22,6 +22,7 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include "Constants.h"
 
 #include <vector>
 #include <stack>
@@ -40,42 +41,75 @@ class Asteroid
 
 class Projectile
 {
-    Vector2 position;
+public:
+    Vector2 position = {};
     Vector2 direction;
+    Vector2 size = { 12, 12 };
 
-    int health;
-    bool isdead = false;
-
-    void kill() {
-
-    }
+    int health = 1;
+    bool dead = false;
+    
 
     void update() {
+        position.x += direction.x * PROJECTILE_SPEED * DELTA;
+        position.y += direction.y * PROJECTILE_SPEED * DELTA;
 
+        if (position.x <= 0 || position.x >= GetScreenWidth() || position.y >= GetScreenHeight() || position.y <= 0 ) {
+            dead = true;
+        }
+
+        //if collision with astroid die
+    }
+
+    void render() {
+        DrawRectangle(position.x, position.y, size.x, size.y, RED);
     }
 
 };
-
 
 //Level code
 class Level
 {
     std::vector<Asteroid> asteroids;
-    std::vector<Projectile> projectiles;
+    std::vector<Projectile> projectiles = {};
     Player player;
 
+public: 
+    void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
+    
     void update() {
 
+        if (IsMouseButtonPressed(0)) { //done to test if the spawning works
+            spawn_projectile(GetMousePosition(), {1,1});
+        }
+
+        for (Projectile& p : projectiles) { 
+            p.update();
+        }
+
+        //erasing everything from the vector which is dead == true
+        projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end()); //ASK
+        
     }
 
     void render() {
+        DrawText("Level", 50, 50, 50, RED);
 
+        for (Projectile& p : projectiles) {
+            p.render();
+        }
     }
-
 
 };
 
+void Level::spawn_projectile(Vector2 position, Vector2 direction) {
+    Projectile projectile{};
 
+    projectile.position = position;
+    projectile.direction = direction;
+
+    projectiles.push_back(projectile);
+}
 
 
 
@@ -95,13 +129,13 @@ void do_main_menu() //Main Menu
     Vector2 mouse_pos = GetMousePosition();
     
     //Title
-    int title_font = 32;
-    int title_x = (GetScreenWidth() / 2) - 32;
+    int title_font = 50;
+    int title_x = (GetScreenWidth() / 4) - 50;
     int title_y = (GetScreenHeight() * 0.25);
     DrawText("ASTEROID CLONE", title_x, title_y, title_font, RED);
 
     //Button
-    int pos_x = GetScreenWidth() / 2;
+    int pos_x = (GetScreenWidth() / 2) - 25;
     int pos_y = (GetScreenHeight() / 2) - 124;
     DrawRectangle(pos_x, pos_y, 124, 64, GREEN);
 
@@ -117,7 +151,19 @@ void do_main_menu() //Main Menu
     }
 }
 
+void update(Level* level) {
+    level->update();
+}
 
+void render(Level* level) {
+    level->render();
+}
+
+void do_level(Level* level) {
+   
+    update(level);
+    render(level);
+}
 
 
 //------------------------------------------------------------------------------------
@@ -135,9 +181,9 @@ int main(void)
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
-
+    Level level;
+    
     states.push(State::MAIN_MENU);
-
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -155,7 +201,7 @@ int main(void)
             do_main_menu();
             break;
         case State::GAME:
-            //do_game(level)
+            do_level(&level);
             break;
         }
 
@@ -168,7 +214,7 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(DARKGRAY);
+        ClearBackground(BLACK);
         
 
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);

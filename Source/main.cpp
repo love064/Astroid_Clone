@@ -33,7 +33,7 @@ const int PLAYER_MAX_SHOTS = 5;
 
 const int ASTEROIDS_SPEED = 2;
 const int MAX_BIG_ASTEROIDS = 4;
-const int MAX_MID_ASTEROIDS = 8;
+const int MAX_ASTEROIDS = 8;
 const int MAX_MINI_ASTEROOIDS = 16;
 
 
@@ -67,7 +67,37 @@ public:
 
 class Asteroid
 {
+public:
+    Vector2 position;
+    Vector2 speed;
+    float radius; //can be upgrade to other shapes later
+    bool active;
 
+    int posx, posy;
+    int velx, vely;
+    bool correctRange = false;
+
+    void update() {
+        for (int i = 0; i < MAX_ASTEROIDS; i++) //generate the asteriods randomly on the screen
+        {
+            posx = GetRandomValue(0, GetScreenHeight());
+
+            while (!correctRange)
+            {
+                if (posx > GetScreenWidth() / 2 - 300 && posx < GetScreenWidth() / 2 + 300) posx = GetRandomValue(0, GetScreenWidth());
+                else correctRange = true;
+            }
+            correctRange = false;
+
+            posy = GetRandomValue(0, GetScreenHeight());
+
+            while (!correctRange)
+            {
+                if (posy > GetScreenHeight() / 2 - 300 && posx < GetScreenHeight() / 2 + 300) posx = GetRandomValue(0, GetScreenHeight());
+                else correctRange = true;
+            }
+        }
+    }
 };
 
 class Projectile

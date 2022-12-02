@@ -79,7 +79,6 @@ public:
 
     int health = 1;
     bool dead = false;
-    
 
     void update() {
         position.x += direction.x * PROJECTILE_SPEED * DELTA;
@@ -92,10 +91,18 @@ public:
         //if collision with astroid die
     }
 
-    void render() {
-        DrawRectangle(position.x, position.y, size.x, size.y, RED);
-    }
+    //texture
+    Texture2D missile;
 
+    int rotation = 0;
+
+    void render() {
+        Vector2 origin = { 0, 0 };
+        Rectangle sourceRec = { 0.0f, 0.0f, (float)missile.width, (float)missile.height };              //chnage, go into paint a select the area using the mouse position to find which part of the thing is the missile
+        Rectangle destRec = { position.x, position.y, (float)missile.width, (float)missile.height };    //chnage
+        DrawTexturePro(missile, sourceRec, destRec, origin, (float)rotation, WHITE);
+        //DrawRectangle(position.x, position.y, size.x, size.y, RED);
+    }
 };
 
 //Level code
@@ -106,6 +113,8 @@ class Level
     Player player;
 
 public: 
+    Texture2D projectile_texture;
+
     void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
     
     void update() {
@@ -138,7 +147,7 @@ void Level::spawn_projectile(Vector2 position, Vector2 direction) {
 
     projectile.position = position;
     projectile.direction = direction;
-
+    projectile.missile = projectile_texture;
     projectiles.push_back(projectile);
 }
 
@@ -182,18 +191,10 @@ void do_main_menu() //Main Menu
     }
 }
 
-void update(Level* level) {
-    level->update();
-}
-
-void render(Level* level) {
-    level->render();
-}
-
 void do_level(Level* level) {
    
-    update(level);
-    render(level);
+    level->update();
+    level->render();
 }
 
 
@@ -213,6 +214,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     Level level;
+
+    level.projectile_texture = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
     
     states.push(State::MAIN_MENU);
 
@@ -225,7 +228,13 @@ int main(void)
         //----------------------------------------------------------------------------------
         
         State current_state = states.top();
-        
+
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
         switch (current_state)
         {
         case State::MAIN_MENU:
@@ -235,19 +244,6 @@ int main(void)
             do_level(&level);
             break;
         }
-
-
-
-
-
-
-        // Draw
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
-
-        ClearBackground(BLACK);
-        
-
         //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
         EndDrawing();

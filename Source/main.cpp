@@ -168,17 +168,17 @@ public:
         }
 
         //if collision with astroid die
+
     }
 
     //texture
     Texture2D missile;
-
     int rotation = 0;
 
-    void render() {//x1 1094, y1 47  , x2 1112, y2 81
+    void render() {
         Vector2 origin = { 0, 0 };
-        Rectangle sourceRec = { 1094.f, 47.f, 22.f, 35.f };              //chnage, go into paint a select the area using the mouse position to find which part of the thing is the missile
-        Rectangle destRec = { position.x, position.y, 22.f, 35.f };    //chnage
+        Rectangle sourceRec = { 1064.f, 790.f, 27.f, 27.f };           
+        Rectangle destRec = { position.x, position.y, 27.f, 27.f };   
         DrawTexturePro(missile, sourceRec, destRec, origin, (float)rotation, WHITE);
         //DrawRectangle(position.x, position.y, size.x, size.y, RED);
     }
@@ -196,9 +196,11 @@ public:
 
     void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
     
+    Asteroid* closest_asteroid(Vector2 position, Vector2 asteroid_size, float range);
+
     void update() {
 
-        if (IsMouseButtonPressed(0)) { //done to test if the spawning works
+        if (IsKeyPressed(KEY_SPACE)) { //done to test if the spawning works
             spawn_projectile(GetMousePosition(), {1,1});
         }
 
@@ -230,7 +232,27 @@ void Level::spawn_projectile(Vector2 position, Vector2 direction) {
     projectiles.push_back(projectile);
 }
 
+float distance_sq(Vector2 a, Vector2 b) {
+    float dx = a.x - b.x;
+    float dy = a.y - b.y;
 
+    return  dx * dx + dy * dy ;
+}
+
+Asteroid* Level::closest_asteroid(Vector2 position, Vector2 asteroid_size, float range) {
+    Asteroid* result = nullptr;
+    float current_closest_distance_sq = range * range;
+
+    for (Asteroid& a : asteroids) {
+        float a_distance_sq = distance_sq(position, a.position);
+        if (a_distance_sq <= current_closest_distance_sq) {
+            current_closest_distance_sq = a_distance_sq;
+           // result = a&;    //fix
+        }
+    }
+    return result;
+
+}
 
 
 

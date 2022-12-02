@@ -96,10 +96,10 @@ public:
 
     int rotation = 0;
 
-    void render() {
+    void render() {//x1 1094, y1 47  , x2 1112, y2 81
         Vector2 origin = { 0, 0 };
-        Rectangle sourceRec = { 0.0f, 0.0f, (float)missile.width, (float)missile.height };              //chnage, go into paint a select the area using the mouse position to find which part of the thing is the missile
-        Rectangle destRec = { position.x, position.y, (float)missile.width, (float)missile.height };    //chnage
+        Rectangle sourceRec = { 1094.f, 47.f, 22.f, 35.f };              //chnage, go into paint a select the area using the mouse position to find which part of the thing is the missile
+        Rectangle destRec = { position.x, position.y, 22.f, 35.f };    //chnage
         DrawTexturePro(missile, sourceRec, destRec, origin, (float)rotation, WHITE);
         //DrawRectangle(position.x, position.y, size.x, size.y, RED);
     }

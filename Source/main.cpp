@@ -34,9 +34,10 @@ const int PLAYER_MAX_SHOTS = 5;
 const int ASTEROIDS_SPEED = 2;
 const int MAX_BIG_ASTEROIDS = 4;
 const int MAX_ASTEROIDS = 8;
-const int MAX_MINI_ASTEROOIDS = 16;
+const int MAX_MINI_ASTEROIDS = 16;
 const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
 
+//static bool gameOver = false;
 
 //Entity code
 class Player 
@@ -117,7 +118,7 @@ public:
 class Asteroid
 {
 public:
-    Vector2 position;
+    Vector2 position = {};
     Vector2 speed;
     float radius; //can be upgrade to other shapes later
     bool active;
@@ -126,7 +127,15 @@ public:
     int velx, vely;
     bool correctRange = false;
 
-    void update() {
+    static Asteroid bigAsteroid[MAX_BIG_ASTEROIDS];
+    static Asteroid miniAsteroid[MAX_MINI_ASTEROIDS];
+
+    int bigiAsteroidCount = 0;
+    int miniAsteroidCount = 0;
+    int destroyedMeteorsCount = 0;
+
+    void update() 
+    {
         for (int i = 0; i < MAX_ASTEROIDS; i++) //generate the asteriods randomly on the screen
         {
             posx = GetRandomValue(0, GetScreenHeight());
@@ -145,7 +154,62 @@ public:
                 if (posy > GetScreenHeight() / 2 - 300 && posx < GetScreenHeight() / 2 + 300) posx = GetRandomValue(0, GetScreenHeight());
                 else correctRange = true;
             }
+
+            bigAsteroid[i].position = Vector2(posx, posy);
+
+            correctRange = false;
+            velx = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
+            vely = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
+
+            while (!correctRange)
+            {
+                if (velx == 0 && vely == 0)
+                {
+                    velx = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
+                    vely = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
+                }
+                else correctRange = true;
+            }
+
+            bigAsteroid[i].speed = Vector2(velx, vely);
+            bigAsteroid[i].radius = 40;
+            bigAsteroid[i].active = true;
+
+            for (int i = 0; i < MAX_MINI_ASTEROIDS; i++)
+            {
+                miniAsteroid[i].position = Vector2(-100, -100);
+                miniAsteroid[i].speed = Vector2(0, 0);
+                miniAsteroid[i].radius = 10;
+                miniAsteroid[i].active = false;
+            }
+
+            miniAsteroidCount = 0;
         }
+    }
+
+    void render()
+    {
+        /*if (!gameOver)
+        {
+            // Draw asteroids
+            for (int i = 0; i < MAX_BIG_ASTEROIDS; i++)
+            {
+                if (bigAsteroid[i].active) DrawCircleV(bigAsteroid[i].position, bigAsteroid[i].radius, WHITE);
+                else DrawCircleV(bigAsteroid[i].position, bigAsteroid[i].radius, WHITE);
+            }
+
+            for (int i = 0; i < MAX_MINI_ASTEROIDS; i++)
+            {
+                if (miniAsteroid[i].active) DrawCircleV(miniAsteroid[i].position, miniAsteroid[i].radius, WHITE);
+                else DrawCircleV(miniAsteroid[i].position, miniAsteroid[i].radius, WHITE);
+            }
+        }*/
+
+        Vector2 origin = { 0, 0 };
+        //big asteroid
+        DrawCircle(posx, posy, 40, WHITE);   
+        //mini asteroid
+        DrawCircle(-100, -100, 10, WHITE);
     }
 };
 
@@ -187,7 +251,7 @@ public:
 //Level code
 class Level
 {
-    std::vector<Asteroid> asteroids;
+    std::vector<Asteroid> asteroids = {};
     std::vector<Projectile> projectiles = {};
     Player player;
 
@@ -195,6 +259,7 @@ public:
     Texture2D projectile_texture;
 
     void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
+    void spawn_asteroids(Vector2 positon, Vector2 direction);
     
     Asteroid* closest_asteroid(Vector2 position, Vector2 asteroid_size, float range);
 
@@ -208,6 +273,8 @@ public:
             p.update();
         }
 
+
+
         //erasing everything from the vector which is dead == true
         projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end()); //ASK
         
@@ -217,6 +284,11 @@ public:
         DrawText("Level", 50, 50, 50, RED);
 
         for (Projectile& p : projectiles) {
+            p.render();
+        }
+
+        for (Asteroid& p : asteroids)
+        {
             p.render();
         }
     }

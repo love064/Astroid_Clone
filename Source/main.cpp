@@ -35,6 +35,7 @@ const int ASTEROIDS_SPEED = 2;
 const int MAX_BIG_ASTEROIDS = 4;
 const int MAX_ASTEROIDS = 8;
 const int MAX_MINI_ASTEROOIDS = 16;
+const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
 
 
 //Entity code
@@ -57,10 +58,58 @@ public:
 
         speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
         speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
+
+        //Rotation
+        
+        if (IsKeyDown(KEY_LEFT))
+        {
+            rotation -= 5;
+        }
+        if (IsKeyDown(KEY_RIGHT))
+        {
+            rotation += 5;
+        }
+
+        //Acceleration
+
+        if (IsKeyDown(KEY_UP))
+        {
+            if (acceleration < 1)
+            {
+                acceleration += 0.04f;
+            }
+        }
+        else
+        {
+            //Slowing Down via drag forces
+            if (acceleration > 0)
+            {
+                acceleration -= 0.02f;
+            }
+            else if (acceleration < 0)
+            {
+                acceleration = 0;
+            }
+        }
+        //Slowing Down via thrusters
+        if (IsKeyDown(KEY_DOWN))
+        {
+            if (acceleration > 0)
+            {
+                acceleration -= 0.04f;
+            }
+            else if (acceleration < 0)
+            {
+                acceleration = 0;
+            }
+        }
+
     }
+
+
     void render()
     {
-
+       
     }
 
 };

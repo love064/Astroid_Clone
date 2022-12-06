@@ -27,6 +27,7 @@
 #include <vector>
 #include <stack>
 
+
 const float PLAYER_SIZE = 20.0f;
 const float PLAYER_SPEED = 2.5f;
 const int PLAYER_MAX_SHOTS = 5;
@@ -36,6 +37,8 @@ const float ASTEROIDS_SPEED = 0.2f;
 //const int MAX_ASTEROIDS = 8;
 //const int MAX_MINI_ASTEROIDS = 16;
 //const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
+
+class Level;
 
 //Entity code
 class Player
@@ -50,54 +53,9 @@ public:
     //Texture2D ship;
 
     bool destroyed = false;
+    //virtual void update(Level* level) = 0;
 
-    void update()
-    {
-        
-        //Player Movement
-
-        speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
-        speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
-        
-        if (IsKeyDown(KEY_UP))
-        {
-            position.x += (speed.x * PLAYER_SPEED);
-            position.y -= (speed.y * PLAYER_SPEED);
-        }
-
-        if (IsKeyDown(KEY_LEFT))
-        {
-            rotation -= 5;
-        }
-        
-        if (IsKeyDown(KEY_RIGHT))
-        {
-            rotation += 5;
-        }
-
-        //Interaction with walls
-        int screenWidth = GetScreenWidth();
-        int screenHeight = GetScreenWidth();
-        
-       
-        if (position.x > screenWidth + PLAYER_SIZE) //Rght Wall
-        {
-            position.x = -(PLAYER_SIZE); 
-        }
-        else if (position.x < -(PLAYER_SIZE))   //Left Wall
-        {
-            position.x = screenWidth + PLAYER_SIZE;
-        }
-        if (position.y > (screenHeight + PLAYER_SIZE)) //Bottom Wall
-        {
-            position.y = -(PLAYER_SIZE);
-        }
-        else if (position.y < -(PLAYER_SIZE))  //Top Wall
-        {
-            position.y = screenHeight + PLAYER_SIZE;
-        }
-    }
-
+    void update(Level* level);
 
     void render()
     {
@@ -176,7 +134,7 @@ public:
         {
             target_asteroid->dead = true;
             dead = true;
-        }*/
+        }//*/
 
     }
 
@@ -186,8 +144,8 @@ public:
 
     void render() {
         Vector2 origin = { 0, 0 };
-        Rectangle sourceRec = { 1064.f, 790.f, 27.f, 27.f };           
-        Rectangle destRec = { position.x, position.y, 27.f, 27.f };   
+        Rectangle sourceRec = { 1093.f, 47.f, 23.f, 36.f };           
+        Rectangle destRec = { position.x, position.y, 23.f, 36.f };   
         DrawTexturePro(missile, sourceRec, destRec, origin, (float)rotation, WHITE);
         //DrawRectangle(position.x, position.y, size.x, size.y, RED);
     }
@@ -203,24 +161,23 @@ class Level
 public: 
     Texture2D projectile_texture;
 
-    void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
+    void spawn_projectile(Vector2 positon, Vector2 direction, int rotation); //parameters should be vector2 position, and vector2 direction
     void spawn_asteroids(Vector2 positon, Vector2 direction);
     
     Asteroid* closest_asteroid(Vector2 position, float range); //ASK Where to put this
-
+    
+    //virtual void update(Level* level) = 0;
     
     void update() {
 
-        player.update();
+        player.update(this);
         
         if (IsKeyPressed(KEY_E)) {
             spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
         }
  
         
-        if (IsKeyPressed(KEY_SPACE)) { //done to test if the spawning works
-            spawn_projectile(GetMousePosition(), {1,1});
-        }
+       
 
         for (Asteroid& a : asteroids) {
             a.update();
@@ -230,6 +187,9 @@ public:
             p.update();
         }
 
+       // if (IsKeyPressed(KEY_SPACE)) { //doesnt work properly they do not move
+         //   spawn_projectile(player.position, player.direction, player.rotation);
+       // }
 
         //erasing everything from the vector which is dead == true
         projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
@@ -265,12 +225,13 @@ void Level::spawn_asteroids(Vector2 position, Vector2 direction) {
 }
 
 
-void Level::spawn_projectile(Vector2 position, Vector2 direction) {
+void Level::spawn_projectile(Vector2 position, Vector2 direction, int rotation) {
     Projectile projectile{};
 
     projectile.position = position;
     projectile.direction = direction;
     projectile.missile = projectile_texture;
+    projectile.rotation = rotation;
     projectiles.push_back(projectile);
 }
 
@@ -296,6 +257,34 @@ Asteroid* Level::closest_asteroid(Vector2 position, float range) {
 
 }
 
+void Player::update(Level* level) //override
+{
+
+
+    speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
+    speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
+
+    if (IsKeyDown(KEY_UP))
+    {
+        position.x += (speed.x * PLAYER_SPEED);
+        position.y -= (speed.y * PLAYER_SPEED);
+    }
+
+    if (IsKeyDown(KEY_LEFT))
+    {
+        rotation -= 5;
+    }
+
+    if (IsKeyDown(KEY_RIGHT))
+    {
+        rotation += 5;
+    }
+
+    if (IsKeyDown(KEY_SPACE)) { //FIX, need to make update virtual void, override
+        level->spawn_projectile(position, direction, rotation);
+    }
+
+}
 
 
 //Menu code

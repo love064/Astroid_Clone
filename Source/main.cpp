@@ -31,13 +31,11 @@ const float PLAYER_SIZE = 20.0f;
 const float PLAYER_SPEED = 6.0f;
 const int PLAYER_MAX_SHOTS = 5;
 
-const int ASTEROIDS_SPEED = 2;
-const int MAX_BIG_ASTEROIDS = 4;
-const int MAX_ASTEROIDS = 8;
-const int MAX_MINI_ASTEROIDS = 16;
+const float ASTEROIDS_SPEED = 0.2f;
+//const int MAX_BIG_ASTEROIDS = 4;
+//const int MAX_ASTEROIDS = 8;
+//const int MAX_MINI_ASTEROIDS = 16;
 const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
-
-//static bool gameOver = false;
 
 //Entity code
 class Player
@@ -120,32 +118,32 @@ public:
     Vector2 speed;
     Vector2 direction;
     float radius; //can be upgrade to other shapes later
-    bool active;
+    //bool active;
 
-    int posx, posy;
-    int velx, vely;
-    bool correctRange = false;
 
-    static Asteroid bigAsteroid[MAX_BIG_ASTEROIDS];
-    static Asteroid miniAsteroid[MAX_MINI_ASTEROIDS];
-
-    int bigiAsteroidCount = 0;
-    int miniAsteroidCount = 0;
-    int destroyedMeteorsCount = 0;
-
-    void update() 
+    void update()
     {
-       
+       if (position.y < 100.f || position.y > 700.f)
+        {
+            direction.y = -direction.y;
+        }
+
+        if (position.x < 100.f || position.x > 700.f)
+        {
+            direction.x = -direction.x;
+        }
+
+        position.x += direction.x * ASTEROIDS_SPEED * DELTA;
+        position.y += direction.y * ASTEROIDS_SPEED * DELTA;
         
     }
 
     void render()
     {
         Vector2 origin = { 0, 0 };
-        //big asteroid
-        DrawCircle(posx, posy, 40, WHITE);   
-        //mini asteroid
-        DrawCircle(-100, -100, 10, WHITE);
+       
+        DrawCircle(position.x, position.y, 40, WHITE);   
+        
     }
 };
 
@@ -208,9 +206,15 @@ public:
         if (IsKeyPressed(KEY_E)) {
             spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
         }
+
+        
         
         if (IsKeyPressed(KEY_SPACE)) { //done to test if the spawning works
             spawn_projectile(GetMousePosition(), {1,1});
+        }
+
+        for (Asteroid& a : asteroids) {
+            a.update();
         }
 
         for (Projectile& p : projectiles) { 

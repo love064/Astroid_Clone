@@ -155,6 +155,8 @@ public:
     Vector2 position = {};
     Vector2 direction;
     Vector2 size = { 12, 12 };
+    float range = 12.f;
+    
 
     int health = 1;
     bool dead = false;
@@ -168,6 +170,12 @@ public:
         }
 
         //if collision with astroid die
+        //Asteroid* target_asteroid = Level::closest_asteroid(position, range); //ask how to link this to the level vector of asteroids
+        /*
+        if (target_asteroid)
+        {
+            target_asteroid->dead = true;
+        }*/
 
     }
 
@@ -197,7 +205,7 @@ public:
     void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
     void spawn_asteroids(Vector2 positon, Vector2 direction);
     
-    Asteroid* closest_asteroid(Vector2 position, Vector2 asteroid_size, float range);
+    Asteroid* closest_asteroid(Vector2 position, float range);
 
     
 
@@ -269,7 +277,7 @@ float distance_sq(Vector2 a, Vector2 b) {
     return  dx * dx + dy * dy ;
 }
 
-Asteroid* Level::closest_asteroid(Vector2 position, Vector2 asteroid_size, float range) {
+Asteroid* Level::closest_asteroid(Vector2 position, float range) {
     Asteroid* result = nullptr;
     float current_closest_distance_sq = range * range;
 
@@ -277,7 +285,7 @@ Asteroid* Level::closest_asteroid(Vector2 position, Vector2 asteroid_size, float
         float a_distance_sq = distance_sq(position, a.position);
         if (a_distance_sq <= current_closest_distance_sq) {
             current_closest_distance_sq = a_distance_sq;
-           // result = a&;    //fix
+            result = &a;    //fix
         }
     }
     return result;

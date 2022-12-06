@@ -28,9 +28,10 @@
 #include <stack>
 
 
-const float PLAYER_SIZE = 20.0f;
+const float PLAYER_SIZE = 50.0f;
 const float PLAYER_SPEED = 2.5f;
 const int PLAYER_MAX_SHOTS = 5;
+float ship_height = 60.0f;
 
 const float ASTEROIDS_SPEED = 0.2f;
 //const int MAX_BIG_ASTEROIDS = 4;
@@ -44,7 +45,7 @@ class Level;
 class Player
 {
 public:
-    Vector2 position = { 400, 400 };
+    Vector2 position = { GetScreenWidth()/2.f, GetScreenHeight() / 2.f };
     Vector2 speed;
     Vector2 direction;
     int acceleration;
@@ -59,9 +60,12 @@ public:
 
     void render()
     {
-        DrawRectangle(position.x, position.y, PLAYER_SIZE, PLAYER_SIZE, BLUE);
+        //DrawRectangle(position.x, position.y, PLAYER_SIZE, PLAYER_SIZE, BLUE);
 
-        
+        Vector2 v1 = { position.x + sinf(rotation * DEG2RAD) * (ship_height), position.y - cosf(rotation * DEG2RAD) * (ship_height) };
+        Vector2 v2 = { position.x - cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y - sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
+        Vector2 v3 = { position.x + cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y + sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
+        DrawTriangle(v1, v2, v3, MAROON);
         /*
         Vector2 origin = { 0, 0 };
         Rectangle sourceRec = { 565.f, 58.f, 102.f, 83.f };
@@ -367,8 +371,8 @@ int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 800;
+    const int screenWidth = 1800;
+    const int screenHeight = 1000;
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 

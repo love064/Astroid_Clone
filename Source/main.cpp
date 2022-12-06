@@ -28,31 +28,33 @@
 #include <stack>
 
 const float PLAYER_SIZE = 20.0f;
-const float PLAYER_SPEED = 3.0f;
+const float PLAYER_SPEED = 2.5f;
 const int PLAYER_MAX_SHOTS = 5;
 
 const float ASTEROIDS_SPEED = 0.2f;
 //const int MAX_BIG_ASTEROIDS = 4;
 //const int MAX_ASTEROIDS = 8;
 //const int MAX_MINI_ASTEROIDS = 16;
-const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
+//const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
 
 //Entity code
 class Player
 {
 public:
-    Vector2 position;
+    Vector2 position = { 400, 400 };
     Vector2 speed;
     Vector2 direction;
     int acceleration;
     int rotation;
     int health = 1;
+    //Texture2D ship;
 
     bool destroyed = false;
 
     void update()
     {
         
+        //Player Movement
 
         speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
         speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
@@ -72,12 +74,42 @@ public:
         {
             rotation += 5;
         }
+
+        //Interaction with walls
+        int screenWidth = GetScreenWidth();
+        int screenHeight = GetScreenWidth();
+        
+       
+        if (position.x > screenWidth + PLAYER_SIZE) //Rght Wall
+        {
+            position.x = -(PLAYER_SIZE); 
+        }
+        else if (position.x < -(PLAYER_SIZE))   //Left Wall
+        {
+            position.x = screenWidth + PLAYER_SIZE;
+        }
+        if (position.y > (screenHeight + PLAYER_SIZE)) //Bottom Wall
+        {
+            position.y = -(PLAYER_SIZE);
+        }
+        else if (position.y < -(PLAYER_SIZE))  //Top Wall
+        {
+            position.y = screenHeight + PLAYER_SIZE;
+        }
     }
 
 
     void render()
     {
         DrawRectangle(position.x, position.y, PLAYER_SIZE, PLAYER_SIZE, BLUE);
+
+        
+        /*
+        Vector2 origin = { 0, 0 };
+        Rectangle sourceRec = { 565.f, 58.f, 102.f, 83.f };
+        Rectangle destRec = { position.x, position.y, 102.f, 83.f };
+        DrawTexturePro(ship, sourceRec, destRec, origin, (float)rotation, WHITE);
+        */
     }
 };
 

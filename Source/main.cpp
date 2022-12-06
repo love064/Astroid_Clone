@@ -117,18 +117,18 @@ public:
     Vector2 position = {};
     Vector2 speed;
     Vector2 direction;
-    float radius; //can be upgrade to other shapes later
-    //bool active;
+    float radius = 40; //can be upgrade to other shapes later
+    bool dead = false;
 
 
     void update()
     {
-       if (position.y < 100.f || position.y > 700.f)
+       if (position.y < radius || position.y > GetScreenHeight()-radius)
         {
             direction.y = -direction.y;
         }
 
-        if (position.x < 100.f || position.x > 700.f)
+        if (position.x < radius || position.x > GetScreenWidth()-radius)
         {
             direction.x = -direction.x;
         }
@@ -142,7 +142,7 @@ public:
     {
         Vector2 origin = { 0, 0 };
        
-        DrawCircle(position.x, position.y, 40, WHITE);   
+        DrawCircle(position.x, position.y, radius, WHITE);   
         
     }
 };
@@ -152,11 +152,11 @@ class Projectile
 public:
     Vector2 position = {};
     Vector2 direction;
-    Vector2 size = { 12, 12 };
+    //Vector2 size = { 12, 12 }; //doesnt use
     float range = 12.f;
     
 
-    int health = 1;
+    int health = 1; //doesnt use
     bool dead = false;
 
     void update() {
@@ -173,11 +173,12 @@ public:
         if (target_asteroid)
         {
             target_asteroid->dead = true;
+            dead = true;
         }*/
 
     }
 
-    //texture
+    //Texture
     Texture2D missile;
     int rotation = 0;
 
@@ -203,10 +204,9 @@ public:
     void spawn_projectile(Vector2 positon, Vector2 direction); //parameters should be vector2 position, and vector2 direction
     void spawn_asteroids(Vector2 positon, Vector2 direction);
     
-    Asteroid* closest_asteroid(Vector2 position, float range);
+    Asteroid* closest_asteroid(Vector2 position, float range); //ASK Where to put this
 
     
-
     void update() {
 
         player.update();
@@ -214,8 +214,7 @@ public:
         if (IsKeyPressed(KEY_E)) {
             spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
         }
-
-        
+ 
         
         if (IsKeyPressed(KEY_SPACE)) { //done to test if the spawning works
             spawn_projectile(GetMousePosition(), {1,1});
@@ -230,10 +229,9 @@ public:
         }
 
 
-
         //erasing everything from the vector which is dead == true
-        projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end()); //ASK
-        
+        projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
+        asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(), [](Asteroid& a) { return a.dead; }), asteroids.end());
     }
 
     void render() {

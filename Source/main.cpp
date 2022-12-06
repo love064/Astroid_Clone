@@ -90,6 +90,8 @@ public:
     float radius = 40; //can be upgrade to other shapes later
     bool dead = false;
 
+  
+
 
     void update()
     {
@@ -105,14 +107,19 @@ public:
 
         position.x += direction.x * ASTEROIDS_SPEED * DELTA;
         position.y += direction.y * ASTEROIDS_SPEED * DELTA;
-        
+
     }
+
+    Texture2D rock;
+    int rotation = 0;
 
     void render()
     {
         Vector2 origin = { 0, 0 };
-       
-        DrawCircle(position.x, position.y, radius, WHITE);   
+        Rectangle sourceRec = {1.f, 831.f, 213.f, 224.f};
+        Rectangle destRec = { position.x, position.y, 213.f, 224.f};
+        DrawTexturePro(rock, sourceRec, destRec, origin, (float)rotation, WHITE);
+        //DrawCircle(position.x, position.y, radius, WHITE);   
         
     }
 };
@@ -213,9 +220,9 @@ public:
             p.render();
         }
 
-        for (Asteroid& p : asteroids)
+        for (Asteroid& a : asteroids)
         {
-            p.render();
+            a.render();
         }
     }
 
@@ -226,7 +233,7 @@ void Level::spawn_asteroids(Vector2 position, Vector2 direction) {
 
     asteroid.position = position;
     asteroid.direction = direction;
-    
+    asteroid.rock = projectile_texture;
     asteroids.push_back(asteroid);
 
 

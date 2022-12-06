@@ -110,7 +110,7 @@ public:
 
     void render()
     {
-       
+        DrawRectangle(position.x, position.y, 64, 64, BLUE);
     }
 
 };
@@ -265,6 +265,9 @@ public:
 
     void update() {
 
+        player.update();
+        
+        
         if (IsKeyPressed(KEY_SPACE)) { //done to test if the spawning works
             spawn_projectile(GetMousePosition(), {1,1});
         }
@@ -283,6 +286,8 @@ public:
     void render() {
         DrawText("Level", 50, 50, 50, RED);
 
+        player.render();
+        
         for (Projectile& p : projectiles) {
             p.render();
         }
@@ -294,6 +299,13 @@ public:
     }
 
 };
+
+
+void Level::spawn_asteroids(Vector2 positon, Vector2 direction) {
+
+
+}
+
 
 void Level::spawn_projectile(Vector2 position, Vector2 direction) {
     Projectile projectile{};

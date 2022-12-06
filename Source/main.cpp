@@ -40,7 +40,7 @@ const int shipHeight = (PLAYER_SIZE / 2) / tanf(20 * DEG2RAD);
 //static bool gameOver = false;
 
 //Entity code
-class Player 
+class Player
 {
 public:
     Vector2 position;
@@ -61,7 +61,7 @@ public:
         speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
 
         //Rotation
-        
+
         if (IsKeyDown(KEY_LEFT))
         {
             rotation -= 5;
@@ -104,7 +104,6 @@ public:
                 acceleration = 0;
             }
         }
-
     }
 
 
@@ -112,7 +111,6 @@ public:
     {
         DrawRectangle(position.x, position.y, 64, 64, BLUE);
     }
-
 };
 
 class Asteroid
@@ -120,6 +118,7 @@ class Asteroid
 public:
     Vector2 position = {};
     Vector2 speed;
+    Vector2 direction;
     float radius; //can be upgrade to other shapes later
     bool active;
 
@@ -136,75 +135,12 @@ public:
 
     void update() 
     {
-        for (int i = 0; i < MAX_ASTEROIDS; i++) //generate the asteriods randomly on the screen
-        {
-            posx = GetRandomValue(0, GetScreenHeight());
-
-            while (!correctRange)
-            {
-                if (posx > GetScreenWidth() / 2 - 300 && posx < GetScreenWidth() / 2 + 300) posx = GetRandomValue(0, GetScreenWidth());
-                else correctRange = true;
-            }
-            correctRange = false;
-
-            posy = GetRandomValue(0, GetScreenHeight());
-
-            while (!correctRange)
-            {
-                if (posy > GetScreenHeight() / 2 - 300 && posx < GetScreenHeight() / 2 + 300) posx = GetRandomValue(0, GetScreenHeight());
-                else correctRange = true;
-            }
-
-            bigAsteroid[i].position = Vector2(posx, posy);
-
-            correctRange = false;
-            velx = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
-            vely = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
-
-            while (!correctRange)
-            {
-                if (velx == 0 && vely == 0)
-                {
-                    velx = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
-                    vely = GetRandomValue(-ASTEROIDS_SPEED, ASTEROIDS_SPEED);
-                }
-                else correctRange = true;
-            }
-
-            bigAsteroid[i].speed = Vector2(velx, vely);
-            bigAsteroid[i].radius = 40;
-            bigAsteroid[i].active = true;
-
-            for (int i = 0; i < MAX_MINI_ASTEROIDS; i++)
-            {
-                miniAsteroid[i].position = Vector2(-100, -100);
-                miniAsteroid[i].speed = Vector2(0, 0);
-                miniAsteroid[i].radius = 10;
-                miniAsteroid[i].active = false;
-            }
-
-            miniAsteroidCount = 0;
-        }
+       
+        
     }
 
     void render()
     {
-        /*if (!gameOver)
-        {
-            // Draw asteroids
-            for (int i = 0; i < MAX_BIG_ASTEROIDS; i++)
-            {
-                if (bigAsteroid[i].active) DrawCircleV(bigAsteroid[i].position, bigAsteroid[i].radius, WHITE);
-                else DrawCircleV(bigAsteroid[i].position, bigAsteroid[i].radius, WHITE);
-            }
-
-            for (int i = 0; i < MAX_MINI_ASTEROIDS; i++)
-            {
-                if (miniAsteroid[i].active) DrawCircleV(miniAsteroid[i].position, miniAsteroid[i].radius, WHITE);
-                else DrawCircleV(miniAsteroid[i].position, miniAsteroid[i].radius, WHITE);
-            }
-        }*/
-
         Vector2 origin = { 0, 0 };
         //big asteroid
         DrawCircle(posx, posy, 40, WHITE);   
@@ -263,10 +199,15 @@ public:
     
     Asteroid* closest_asteroid(Vector2 position, Vector2 asteroid_size, float range);
 
+    
+
     void update() {
 
         player.update();
         
+        if (IsKeyPressed(KEY_E)) {
+            spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
+        }
         
         if (IsKeyPressed(KEY_SPACE)) { //done to test if the spawning works
             spawn_projectile(GetMousePosition(), {1,1});
@@ -300,8 +241,13 @@ public:
 
 };
 
+void Level::spawn_asteroids(Vector2 position, Vector2 direction) {
+    Asteroid asteroid{};
 
-void Level::spawn_asteroids(Vector2 positon, Vector2 direction) {
+    asteroid.position = position;
+    asteroid.direction = direction;
+    
+    asteroids.push_back(asteroid);
 
 
 }

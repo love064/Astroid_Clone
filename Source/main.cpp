@@ -284,6 +284,29 @@ void Player::update(Level* level) //override
         level->spawn_projectile(position, direction, rotation);
     }
 
+    //Wall interaction
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenWidth();
+
+
+    if (position.x > screenWidth + PLAYER_SIZE) //Rght Wall
+    {
+        position.x = -(PLAYER_SIZE);
+    }
+    else if (position.x < -(PLAYER_SIZE))   //Left Wall
+    {
+        position.x = screenWidth + PLAYER_SIZE;
+    }
+    if (position.y > (screenHeight + PLAYER_SIZE)) //Bottom Wall
+    {
+        position.y = -(PLAYER_SIZE);
+    }
+    else if (position.y < -(PLAYER_SIZE))  //Top Wall
+    {
+        position.y = screenHeight + PLAYER_SIZE;
+    }
+
+
 }
 
 

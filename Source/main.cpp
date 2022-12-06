@@ -28,7 +28,7 @@
 #include <stack>
 
 const float PLAYER_SIZE = 20.0f;
-const float PLAYER_SPEED = 6.0f;
+const float PLAYER_SPEED = 3.0f;
 const int PLAYER_MAX_SHOTS = 5;
 
 const float ASTEROIDS_SPEED = 0.2f;
@@ -52,62 +52,32 @@ public:
 
     void update()
     {
-        position.x += (speed.x * acceleration);
-        position.y -= (speed.y * acceleration);
+        
 
         speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
         speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
-
-        //Rotation
+        
+        if (IsKeyDown(KEY_UP))
+        {
+            position.x += (speed.x * PLAYER_SPEED);
+            position.y -= (speed.y * PLAYER_SPEED);
+        }
 
         if (IsKeyDown(KEY_LEFT))
         {
             rotation -= 5;
         }
+        
         if (IsKeyDown(KEY_RIGHT))
         {
             rotation += 5;
-        }
-
-        //Acceleration
-
-        if (IsKeyDown(KEY_UP))
-        {
-            if (acceleration < 1)
-            {
-                acceleration += 0.04f;
-            }
-        }
-        else
-        {
-            //Slowing Down via drag forces
-            if (acceleration > 0)
-            {
-                acceleration -= 0.02f;
-            }
-            else if (acceleration < 0)
-            {
-                acceleration = 0;
-            }
-        }
-        //Slowing Down via thrusters
-        if (IsKeyDown(KEY_DOWN))
-        {
-            if (acceleration > 0)
-            {
-                acceleration -= 0.04f;
-            }
-            else if (acceleration < 0)
-            {
-                acceleration = 0;
-            }
         }
     }
 
 
     void render()
     {
-        DrawRectangle(position.x, position.y, 64, 64, BLUE);
+        DrawRectangle(position.x, position.y, PLAYER_SIZE, PLAYER_SIZE, BLUE);
     }
 };
 

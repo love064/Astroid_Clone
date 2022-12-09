@@ -70,6 +70,11 @@ void do_level(Level* level) {
    
     level->update();
     level->render();
+    
+    /*int numb_asteroid = 5;
+    for (int i = 0; i < numb_asteroid; i++) {//FIX
+        Level::spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });
+    }//*/
 }
 
 

@@ -24,7 +24,7 @@ void Player::update(Level* level)
         rotation -= 5;
     }
 
-    Vector2 direction = { cos(rotation * DEG2RAD), sin(rotation * DEG2RAD)};
+    Vector2 direction = { cos(rotation * DEG2RAD), sin(rotation * DEG2RAD)}; //not the right direction 
 
     if (IsKeyPressed(KEY_SPACE)) { //FIX, after it spawns the projectiles dont move
         level->spawn_projectile(position, direction, rotation);
@@ -50,6 +50,13 @@ void Player::update(Level* level)
     {
         position.y = screenHeight + PLAYER_SIZE;
     }
+
+    Asteroid* target_asteroid = level->closest_asteroid(position, range);
+    if (target_asteroid)
+    {
+        target_asteroid->dead = true;
+        health = health - 1;
+    }//*/
 }
 
 void Player::render()
@@ -87,7 +94,7 @@ void Asteroid::update()
 
 void Asteroid::render()
 {
-    Vector2 origin = { 0, 0 };
+    Vector2 origin = { 213.f/2.f, 224.f/2.f };
     Rectangle sourceRec = { 1.f, 831.f, 213.f, 224.f };
     Rectangle destRec = { position.x, position.y, 213.f, 224.f };
     DrawTexturePro(rock, sourceRec, destRec, origin, (float)rotation, WHITE);
@@ -103,7 +110,7 @@ void Projectile::update(Level* level) {
     }
 
     //if collision with astroid die //ASK HOW TO IMPLEMENT
-    /*Asteroid* target_asteroid = Level::closest_asteroid(position, range); //ask how to link this to the level vector of asteroids
+    Asteroid* target_asteroid = level->closest_asteroid(position, range); //ask how to link this to the level vector of asteroids
     
     if (target_asteroid)
     {

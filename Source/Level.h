@@ -11,7 +11,7 @@ class Player
 public:
     Vector2 position = { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f };
     Vector2 speed;
-    
+    float range = PLAYER_SIZE * 3.5;
     int acceleration;
     int rotation;
     bool dead = false;

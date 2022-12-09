@@ -26,7 +26,7 @@ void Player::update(Level* level)
 
     Vector2 direction = { cos(rotation * DEG2RAD), sin(rotation * DEG2RAD)}; //not the right direction 
 
-    if (IsKeyPressed(KEY_SPACE)) { //FIX, after it spawns the projectiles dont move
+    if (IsKeyPressed(KEY_SPACE)) { //FIX
         level->spawn_projectile(position, direction, rotation);
     }
 
@@ -56,7 +56,7 @@ void Player::update(Level* level)
     {
         target_asteroid->dead = true;
         health = health - 1;
-    }//*/
+    }
 }
 
 void Player::render()
@@ -109,14 +109,15 @@ void Projectile::update(Level* level) {
         dead = true;
     }
 
-    //if collision with astroid die //ASK HOW TO IMPLEMENT
-    Asteroid* target_asteroid = level->closest_asteroid(position, range); //ask how to link this to the level vector of asteroids
+    //if collision with astroid die
+    Asteroid* target_asteroid = level->closest_asteroid(position, range);
     
     if (target_asteroid)
     {
         target_asteroid->dead = true;
         dead = true;
-    }//*/
+        level->points = level->points + 50;
+    }
 }
 
 void Projectile::render() {
@@ -136,11 +137,6 @@ void Level::update() {
         spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
     }
 
-    /*int numb_asteroid = 5;
-    for (int i = 0; i < numb_asteroid; i++) {//FIX
-        spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });
-    }*/
-
     for (Asteroid& a : asteroids) {
         a.update();
     }
@@ -152,10 +148,16 @@ void Level::update() {
     //erasing everything from the vector which is dead == true
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
     asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(), [](Asteroid& a) { return a.dead; }), asteroids.end());
+
+    if (player.health <= 0) {
+        reset();
+    }
+
 }
 
 void Level::render() {
     DrawText("Level", 50, 50, 50, RED);
+    DrawText("Points:", 32, 32, 32, RED);
 
     player.render();
 
@@ -207,4 +209,20 @@ Asteroid* Level::closest_asteroid(Vector2 position, float range) {
         }
     }
     return result;
+}
+
+void Level::reset() {
+    asteroids.clear();
+    projectiles.clear();
+
+    player.position = { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f };
+    player.speed;
+    player.acceleration;
+    player.rotation = 0;
+    player.health = 3;
+
+    int numb_asteroid = 5;
+    for (int i = 0; i < numb_asteroid; i++) {
+        spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });
+    }
 }

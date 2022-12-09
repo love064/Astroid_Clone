@@ -14,11 +14,9 @@ public:
     float range = PLAYER_SIZE * 3.5;
     int acceleration;
     int rotation;
-    bool dead = false;
-    int health = 1; //doesnt use
+    int health = 3; 
     //Texture2D ship;
     
-   
     void update(Level* level);
     void render();
 };
@@ -66,12 +64,16 @@ class Level
 
 public:
     Texture2D projectile_texture;
+    int points = 0;
 
     void spawn_projectile(Vector2 positon, Vector2 direction, int rotation); //parameters should be vector2 position, and vector2 direction
     void spawn_asteroids(Vector2 positon, Vector2 direction);
 
     Asteroid* closest_asteroid(Vector2 position, float range); //ASK Where to put this
 
+   
+
     void update();
     void render();
+    void reset();
 };

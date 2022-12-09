@@ -15,7 +15,7 @@ public:
     int acceleration;
     int rotation;
     int health = 0; 
-    //Texture2D ship;
+    Texture2D ship;
     
     void update(Level* level);
     void render();
@@ -27,7 +27,7 @@ public:
     Vector2 position = {};
     Vector2 speed;
     Vector2 direction;
-    float radius = 40; //change to fit new specs
+    float radius = 100;
     bool dead = false;
     int numb_asteroid = 0;
     Texture2D rock;
@@ -62,14 +62,13 @@ class Level
 
 public:
     Texture2D projectile_texture;
+    Sound thrust;
     int points = 0;
 
-    void spawn_projectile(Vector2 positon, Vector2 direction, int rotation); //parameters should be vector2 position, and vector2 direction
+    void spawn_projectile(Vector2 positon, Vector2 direction, int rotation);
     void spawn_asteroids(Vector2 positon, Vector2 direction);
 
-    Asteroid* closest_asteroid(Vector2 position, float range); //ASK Where to put this
-
-   
+    Asteroid* closest_asteroid(Vector2 position, float range);
 
     void update();
     void render();

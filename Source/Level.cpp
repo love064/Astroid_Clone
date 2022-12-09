@@ -2,7 +2,6 @@
 #include "Constants.h"
 
 
-
 void Player::update(Level* level)
 {
     speed.x = cos(rotation * DEG2RAD) * PLAYER_SPEED;
@@ -12,6 +11,7 @@ void Player::update(Level* level)
     {
         position.x += (speed.x * PLAYER_SPEED);
         position.y -= (speed.y * PLAYER_SPEED);
+        PlaySoundMulti(level->thrust);
     }
 
     if (IsKeyDown(KEY_LEFT))
@@ -24,9 +24,9 @@ void Player::update(Level* level)
         rotation -= 5;
     }
 
-    Vector2 direction = { cos(-rotation * DEG2RAD), sin(-rotation * DEG2RAD)}; //not the right direction 
+    Vector2 direction = { cos(-rotation * DEG2RAD), sin(-rotation * DEG2RAD)};
 
-    if (IsKeyPressed(KEY_SPACE)) { //FIX
+    if (IsKeyPressed(KEY_SPACE)) { //FIX, not right rotation
         level->spawn_projectile(position, direction, rotation);
     }
 
@@ -34,21 +34,21 @@ void Player::update(Level* level)
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenWidth();
 
-    if (position.x > screenWidth + PLAYER_SIZE) //Right Wall
+    if (position.x > screenWidth + ship_height) //Right Wall
     {
-        position.x = -(PLAYER_SIZE);
+        position.x = -(ship_height);
     }
-    else if (position.x < -(PLAYER_SIZE))   //Left Wall
+    else if (position.x < -(ship_height))   //Left Wall
     {
-        position.x = screenWidth + PLAYER_SIZE;
+        position.x = screenWidth + ship_height;
     }
-    if (position.y > (screenHeight + PLAYER_SIZE)) //Bottom Wall
+    if (position.y > (screenHeight + ship_height)) //Bottom Wall
     {
-        position.y = -(PLAYER_SIZE);
+        position.y = -(ship_height);
     }
-    else if (position.y < -(PLAYER_SIZE))  //Top Wall
+    else if (position.y < -(ship_height))  //Top Wall
     {
-        position.y = screenHeight + PLAYER_SIZE;
+        position.y = screenHeight + ship_height;
     }
 
     Asteroid* target_asteroid = level->closest_asteroid(position, range);
@@ -61,17 +61,18 @@ void Player::update(Level* level)
 
 void Player::render()
 {
-
+    /*
     Vector2 v1 = { position.x + cosf(rotation * DEG2RAD) * (ship_height), position.y - sinf(rotation * DEG2RAD) * (ship_height) };
     Vector2 v2 = { position.x - sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y - cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
     Vector2 v3 = { position.x + sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y + cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
-    DrawTriangle(v1, v2, v3, MAROON);
-    /*
+    DrawTriangle(v1, v2, v3, MAROON);//*/
+    
+    
     Vector2 origin = { 0, 0 };
     Rectangle sourceRec = { 565.f, 58.f, 102.f, 83.f };
     Rectangle destRec = { position.x, position.y, 102.f, 83.f };
-    DrawTexturePro(ship, sourceRec, destRec, origin, (float)rotation, WHITE);
-    */
+    DrawTexturePro(ship, sourceRec, destRec, origin, (float)rotation, WHITE);//*/
+   
 }
 
 
@@ -98,7 +99,6 @@ void Asteroid::render()
     Rectangle sourceRec = { 1.f, 831.f, 213.f, 224.f };
     Rectangle destRec = { position.x, position.y, 213.f, 224.f };
     DrawTexturePro(rock, sourceRec, destRec, origin, (float)rotation, WHITE);
-    //DrawCircle(position.x, position.y, radius, WHITE);   
 }
 
 void Projectile::update(Level* level) {
@@ -117,6 +117,7 @@ void Projectile::update(Level* level) {
         target_asteroid->dead = true;
         dead = true;
         level->points = level->points + 50;
+        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
     }
 }
 
@@ -125,7 +126,6 @@ void Projectile::render() {
     Rectangle sourceRec = { 1093.f, 47.f, 23.f, 36.f };
     Rectangle destRec = { position.x, position.y, 23.f, 36.f };
     DrawTexturePro(missile, sourceRec, destRec, origin, (float)rotation, WHITE);
-    //DrawRectangle(position.x, position.y, size.x, size.y, RED);
 }
 
 
@@ -135,6 +135,10 @@ void Level::update() {
 
     if (IsKeyPressed(KEY_E)) {
         spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
+    }
+
+    if (IsKeyPressed(KEY_R)) { //FIX
+        PlaySoundMulti(thrust);
     }
 
     for (Asteroid& a : asteroids) {
@@ -149,15 +153,14 @@ void Level::update() {
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
     asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(), [](Asteroid& a) { return a.dead; }), asteroids.end());
 
-    if (player.health <= 0) {
+    if (player.health <= 0) { //if times change to win screen with score
         reset();
     }
-
 }
 
 void Level::render() {
-    DrawText("Level", 32, 32, 50, RED);
-    DrawText(TextFormat("Points: %4i", points), 64, 64, 32, RED); //FIX, add a way to show points
+    DrawText("Level", 30, 30, 50, RED);
+    DrawText(TextFormat("Points: %4i", points), 30, 75, 32, RED);
 
     player.render();
 
@@ -223,7 +226,7 @@ void Level::reset() {
     player.health = 3;
 
     int numb_asteroid = 5;
-    for (int i = 0; i < numb_asteroid; i++) { //FIX SPAWN AERA
-        spawn_asteroids({ (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
+    for (int i = 0; i < numb_asteroid; i++) { 
+        spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
     }
 }

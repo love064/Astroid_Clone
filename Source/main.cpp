@@ -24,7 +24,6 @@
 #include "raylib.h"
 #include "Constants.h"
 #include "Level.h"
-
 #include <stack>
 
 
@@ -84,14 +83,20 @@ int main(void)
     const int screenHeight = 1000;
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitAudioDevice();
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     Level level;
+    Player player;
 
-    level.projectile_texture = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
-    
+    level.projectile_texture    = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
+    player.ship                 = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png"); //FIX
+   
+    level.thrust = LoadSound("sounds/space_ship_thurst.wav");
+
+    SetSoundVolume(level.thrust, 0.5f);
 
     states.push(State::MAIN_MENU);
 
@@ -120,7 +125,6 @@ int main(void)
             do_level(&level);
             break;
         }
-        //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -128,6 +132,10 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    StopSoundMulti();
+    UnloadSound(level.thrust);
+    CloseAudioDevice();
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 

@@ -89,10 +89,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     Level level;
-    Player player;
 
     level.projectile_texture    = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
-    player.ship                 = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png"); //FIX
    
     level.thrust = LoadSound("sounds/space_ship_thurst.wav");
 

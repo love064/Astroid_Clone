@@ -13,12 +13,12 @@ public:
     Vector2 speed;
     float range = PLAYER_SIZE * 3.5;
     int acceleration;
-    int rotation;
+    int rotation = 50;
     int health = 0; 
     Texture2D ship;
     
     void update(Level* level);
-    void render();
+    void render(Level* level);
 };
 
 class Asteroid

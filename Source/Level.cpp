@@ -27,7 +27,7 @@ void Player::update(Level* level)
     Vector2 direction = { cos(-rotation * DEG2RAD), sin(-rotation * DEG2RAD)};
 
     if (IsKeyPressed(KEY_SPACE)) { //FIX, not right rotation
-        level->spawn_projectile(position, direction, rotation);
+        level->spawn_projectile(position, direction, -rotation + 90.f);
     }
 
     //Wall interaction
@@ -59,20 +59,12 @@ void Player::update(Level* level)
     }
 }
 
-void Player::render()
+void Player::render(Level* level)
 {
-    /*
-    Vector2 v1 = { position.x + cosf(rotation * DEG2RAD) * (ship_height), position.y - sinf(rotation * DEG2RAD) * (ship_height) };
-    Vector2 v2 = { position.x - sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y - cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
-    Vector2 v3 = { position.x + sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y + cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
-    DrawTriangle(v1, v2, v3, MAROON);//*/
-    
-    
-    Vector2 origin = { 0, 0 };
-    Rectangle sourceRec = { 565.f, 58.f, 102.f, 83.f };
-    Rectangle destRec = { position.x, position.y, 102.f, 83.f };
-    DrawTexturePro(ship, sourceRec, destRec, origin, (float)rotation, WHITE);//*/
-   
+    Vector2 origin = { 97.f/2.f, 83.f/2.f };
+    Rectangle sourceRec = { 565.f, 58.f, 97.f, 83.f };
+    Rectangle destRec = { position.x, position.y, 97.f, 83.f };
+    DrawTexturePro(level->projectile_texture, sourceRec, destRec, origin, (float)-rotation - 90.f, WHITE);//*/
 }
 
 
@@ -162,7 +154,7 @@ void Level::render() {
     DrawText("Level", 30, 30, 50, RED);
     DrawText(TextFormat("Points: %4i", points), 30, 75, 32, RED);
 
-    player.render();
+    player.render(this);
 
     for (Projectile& p : projectiles) {
         p.render();

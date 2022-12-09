@@ -11,7 +11,7 @@ class Player
 public:
     Vector2 position = { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f };
     Vector2 speed;
-    Vector2 direction;
+    
     int acceleration;
     int rotation;
     bool dead = false;
@@ -29,8 +29,9 @@ public:
     Vector2 position = {};
     Vector2 speed;
     Vector2 direction;
-    float radius = 40; //chnage to fit new specs
+    float radius = 40; //change to fit new specs
     bool dead = false;
+    int numb_asteroid = 0;
     Texture2D rock;
     int rotation = 0;
 
@@ -52,7 +53,7 @@ public:
     Texture2D missile;
     int rotation = 0;
 
-    void update();    
+    void update(Level* level);
     void render();
 };
 

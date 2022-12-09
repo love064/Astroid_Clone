@@ -5,8 +5,8 @@
 
 void Player::update(Level* level)
 {
-    speed.x = sin(rotation * DEG2RAD) * PLAYER_SPEED;
-    speed.y = cos(rotation * DEG2RAD) * PLAYER_SPEED;
+    speed.x = cos(rotation * DEG2RAD) * PLAYER_SPEED;
+    speed.y = sin(rotation * DEG2RAD) * PLAYER_SPEED;
 
     if (IsKeyDown(KEY_UP))
     {
@@ -16,15 +16,17 @@ void Player::update(Level* level)
 
     if (IsKeyDown(KEY_LEFT))
     {
-        rotation -= 5;
+        rotation += 5;
     }
 
     if (IsKeyDown(KEY_RIGHT))
     {
-        rotation += 5;
+        rotation -= 5;
     }
 
-    if (IsKeyDown(KEY_SPACE)) { //FIX, after it spawns the projectiles dont move
+    Vector2 direction = { cos(rotation * DEG2RAD), sin(rotation * DEG2RAD)};
+
+    if (IsKeyPressed(KEY_SPACE)) { //FIX, after it spawns the projectiles dont move
         level->spawn_projectile(position, direction, rotation);
     }
 
@@ -32,7 +34,7 @@ void Player::update(Level* level)
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenWidth();
 
-    if (position.x > screenWidth + PLAYER_SIZE) //Rght Wall
+    if (position.x > screenWidth + PLAYER_SIZE) //Right Wall
     {
         position.x = -(PLAYER_SIZE);
     }
@@ -53,9 +55,9 @@ void Player::update(Level* level)
 void Player::render()
 {
 
-    Vector2 v1 = { position.x + sinf(rotation * DEG2RAD) * (ship_height), position.y - cosf(rotation * DEG2RAD) * (ship_height) };
-    Vector2 v2 = { position.x - cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y - sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
-    Vector2 v3 = { position.x + cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y + sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
+    Vector2 v1 = { position.x + cosf(rotation * DEG2RAD) * (ship_height), position.y - sinf(rotation * DEG2RAD) * (ship_height) };
+    Vector2 v2 = { position.x - sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y - cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
+    Vector2 v3 = { position.x + sinf(rotation * DEG2RAD) * (PLAYER_SIZE / 2), position.y + cosf(rotation * DEG2RAD) * (PLAYER_SIZE / 2) };
     DrawTriangle(v1, v2, v3, MAROON);
     /*
     Vector2 origin = { 0, 0 };
@@ -92,7 +94,7 @@ void Asteroid::render()
     //DrawCircle(position.x, position.y, radius, WHITE);   
 }
 
-void Projectile::update() {
+void Projectile::update(Level* level) {
     position.x += direction.x * PROJECTILE_SPEED * DELTA;
     position.y += direction.y * PROJECTILE_SPEED * DELTA;
 
@@ -100,9 +102,9 @@ void Projectile::update() {
         dead = true;
     }
 
-    //if collision with astroid die
-    //Asteroid* target_asteroid = Level::closest_asteroid(position, range); //ask how to link this to the level vector of asteroids
-    /*
+    //if collision with astroid die //ASK HOW TO IMPLEMENT
+    /*Asteroid* target_asteroid = Level::closest_asteroid(position, range); //ask how to link this to the level vector of asteroids
+    
     if (target_asteroid)
     {
         target_asteroid->dead = true;
@@ -127,12 +129,17 @@ void Level::update() {
         spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
     }
 
+    /*int numb_asteroid = 5;
+    for (int i = 0; i < numb_asteroid; i++) {//FIX
+        spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });
+    }*/
+
     for (Asteroid& a : asteroids) {
         a.update();
     }
 
     for (Projectile& p : projectiles) {
-        p.update();
+        p.update(this);
     }
 
     //erasing everything from the vector which is dead == true
@@ -189,7 +196,7 @@ Asteroid* Level::closest_asteroid(Vector2 position, float range) {
         float a_distance_sq = distance_sq(position, a.position);
         if (a_distance_sq <= current_closest_distance_sq) {
             current_closest_distance_sq = a_distance_sq;
-            result = &a;    //fix
+            result = &a; 
         }
     }
     return result;

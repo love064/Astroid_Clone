@@ -101,6 +101,13 @@ void Projectile::update(Level* level) {
         dead = true;
     }
 
+    /*if (!dead) {
+        PlaySoundMulti(level->thrust);
+    }
+    else {
+        StopSoundMulti();
+    }//*/
+
     //if collision with astroid die
     Asteroid* target_asteroid = level->closest_asteroid(position, range);
     
@@ -109,6 +116,7 @@ void Projectile::update(Level* level) {
         target_asteroid->dead = true;
         dead = true;
         level->points = level->points + 50;
+        PlaySoundMulti(level->explosion);
         level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
     }
 }

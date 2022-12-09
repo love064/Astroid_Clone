@@ -63,6 +63,8 @@ class Level
 public:
     Texture2D projectile_texture;
     Sound thrust;
+    Sound explosion;
+    Sound shoot;
     int points = 0;
 
     void spawn_projectile(Vector2 positon, Vector2 direction, int rotation);

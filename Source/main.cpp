@@ -93,8 +93,12 @@ int main(void)
     level.projectile_texture    = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
    
     level.thrust = LoadSound("sounds/space_ship_thurst.wav");
+    level.explosion = LoadSound("sounds/explosion.wav");
+    level.shoot = LoadSound("sounds/missile_sound.wav");
 
     SetSoundVolume(level.thrust, 0.5f);
+    SetSoundVolume(level.explosion, 0.5f);
+    SetSoundVolume(level.shoot, 0.5f);
 
     states.push(State::MAIN_MENU);
 

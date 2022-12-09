@@ -14,7 +14,7 @@ public:
     float range = PLAYER_SIZE * 3.5;
     int acceleration;
     int rotation;
-    int health = 3; 
+    int health = 0; 
     //Texture2D ship;
     
     void update(Level* level);
@@ -42,11 +42,9 @@ class Projectile
 public:
     Vector2 position = {};
     Vector2 direction;
-    //Vector2 size = { 12, 12 }; //doesnt use
-    float range = 12.f;
+    float range = 150.f;
     bool dead = false;
-    int health = 1; //doesnt use
-    
+   
     //Texture
     Texture2D missile;
     int rotation = 0;

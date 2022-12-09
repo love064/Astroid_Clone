@@ -24,7 +24,7 @@ void Player::update(Level* level)
         rotation -= 5;
     }
 
-    Vector2 direction = { cos(rotation * DEG2RAD), sin(rotation * DEG2RAD)}; //not the right direction 
+    Vector2 direction = { cos(-rotation * DEG2RAD), sin(-rotation * DEG2RAD)}; //not the right direction 
 
     if (IsKeyPressed(KEY_SPACE)) { //FIX
         level->spawn_projectile(position, direction, rotation);
@@ -156,8 +156,8 @@ void Level::update() {
 }
 
 void Level::render() {
-    DrawText("Level", 50, 50, 50, RED);
-    DrawText("Points:", 32, 32, 32, RED);
+    DrawText("Level", 32, 32, 50, RED);
+    DrawText(TextFormat("Points: %4i", points), 64, 64, 32, RED); //FIX, add a way to show points
 
     player.render();
 
@@ -214,6 +214,7 @@ Asteroid* Level::closest_asteroid(Vector2 position, float range) {
 void Level::reset() {
     asteroids.clear();
     projectiles.clear();
+    points = 0;
 
     player.position = { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f };
     player.speed;
@@ -222,7 +223,7 @@ void Level::reset() {
     player.health = 3;
 
     int numb_asteroid = 5;
-    for (int i = 0; i < numb_asteroid; i++) {
-        spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });
+    for (int i = 0; i < numb_asteroid; i++) { //FIX SPAWN AERA
+        spawn_asteroids({ (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
     }
 }

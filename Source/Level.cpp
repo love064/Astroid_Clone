@@ -28,6 +28,7 @@ void Player::update(Level* level)
 
     if (IsKeyPressed(KEY_SPACE)) { //FIX, not right rotation
         level->spawn_projectile(position, direction, -rotation + 90.f);
+        PlaySoundMulti(level->pew);
     }
 
     //Wall interaction
@@ -100,13 +101,6 @@ void Projectile::update(Level* level) {
     if (position.x <= 0 || position.x >= GetScreenWidth() || position.y >= GetScreenHeight() || position.y <= 0) {
         dead = true;
     }
-
-    /*if (!dead) {
-        PlaySoundMulti(level->thrust);
-    }
-    else {
-        StopSoundMulti();
-    }//*/
 
     //if collision with astroid die
     Asteroid* target_asteroid = level->closest_asteroid(position, range);

@@ -159,16 +159,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Entities.cpp" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\My_Maths.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Constants.h" />
-    <ClInclude Include="Source\Entities.h" />
     <ClInclude Include="Source\Level.h" />
-    <ClInclude Include="Source\My_Maths.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

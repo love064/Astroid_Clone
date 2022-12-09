@@ -21,25 +21,18 @@
     <ClCompile Include="Source\Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\My_Maths.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Entities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Level.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\My_Maths.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Constants.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entities.h">
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme.txt">
       <Filter>Source Files</Filter>
-    </ClInclude>
+    </Text>
   </ItemGroup>
 </Project>

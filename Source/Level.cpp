@@ -1,7 +1,6 @@
 #include "Level.h"
 #include "Constants.h"
 
-
 void Player::update(Level* level)
 {
     speed.x = cos(rotation * DEG2RAD) * PLAYER_SPEED;
@@ -26,7 +25,7 @@ void Player::update(Level* level)
 
     Vector2 direction = { cos(-rotation * DEG2RAD), sin(-rotation * DEG2RAD)};
 
-    if (IsKeyPressed(KEY_SPACE)) { //FIX, not right rotation
+    if (IsKeyPressed(KEY_SPACE)) { 
         level->spawn_projectile(position, direction, -rotation + 90.f);
         PlaySoundMulti(level->pew);
     }
@@ -52,11 +51,13 @@ void Player::update(Level* level)
         position.y = screenHeight + ship_height;
     }
 
+    //Damage
     Asteroid* target_asteroid = level->closest_asteroid(position, range);
     if (target_asteroid)
     {
         target_asteroid->dead = true;
         health = health - 1;
+        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
     }
 }
 
@@ -85,7 +86,6 @@ void Asteroid::update()
     position.y += direction.y * ASTEROIDS_SPEED * DELTA;
 }
 
-
 void Asteroid::render()
 {
     Vector2 origin = { 213.f/2.f, 224.f/2.f };
@@ -93,6 +93,7 @@ void Asteroid::render()
     Rectangle destRec = { position.x, position.y, 213.f, 224.f };
     DrawTexturePro(rock, sourceRec, destRec, origin, (float)rotation, WHITE);
 }
+
 
 void Projectile::update(Level* level) {
     position.x += direction.x * PROJECTILE_SPEED * DELTA;
@@ -126,14 +127,6 @@ void Projectile::render() {
 void Level::update() {
 
     player.update(this);
-
-    if (IsKeyPressed(KEY_E)) {
-        spawn_asteroids({ (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) }, { (float)GetRandomValue(100, 700), (float)GetRandomValue(100, 700) });//1st should be random positon, random direction
-    }
-
-    if (IsKeyPressed(KEY_R)) { //FIX
-        PlaySoundMulti(thrust);
-    }
 
     for (Asteroid& a : asteroids) {
         a.update();

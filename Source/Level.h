@@ -13,7 +13,7 @@ public:
     Vector2 speed;
     float range = PLAYER_SIZE * 3.5;
     int acceleration;
-    int rotation = 50;
+    int rotation = 0;
     int health = 0; 
     Texture2D ship;
     

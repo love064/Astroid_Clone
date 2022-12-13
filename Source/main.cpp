@@ -76,8 +76,8 @@ int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1800;
-    const int screenHeight = 1000;
+    const int screenWidth = 1200;
+    const int screenHeight = 1200;
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     InitAudioDevice();

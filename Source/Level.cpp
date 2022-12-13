@@ -60,7 +60,7 @@ void Player::update(Level* level)
     {
         target_asteroid->dead = true;
         health = health - 1;
-        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
+        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
     }
 }
 
@@ -136,7 +136,7 @@ void Projectile::update(Level* level) {
         dead = true;
         level->points = level->points + 50;
         PlaySoundMulti(level->explosion);
-        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
+        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
     }
 }
 
@@ -257,6 +257,6 @@ void Level::reset() {
 
     int numb_asteroid = 5;
     for (int i = 0; i < numb_asteroid; i++) { 
-        spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) });
+        spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
     }
 }

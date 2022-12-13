@@ -47,3 +47,5 @@ Contribution
 		- constants
 			- DELTA
 			- PROJECTILE_SPEED
+		- Organization
+			- Header, and cpp files

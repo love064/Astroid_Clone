@@ -38,7 +38,14 @@ Contribution
 			- do_main_menu()
 			- do_game()
 		- Textures
+			- Initialization
+			- Level(render)
+			- Projectile(render)
 		- Sounds
+			- Initialization 
+			- Thrust
+			- Explsoion
+			- Pew
 		- Player(update) (only parts bellow)
 			-> shooting
 			-> damage

@@ -18,7 +18,16 @@ Controls
 
 Contribution
 	Krystof
-		- 
+		- Player
+			- Player movement forward and rotation
+			- Player interaction with screen borders
+			- Function to render the player ship texture
+			- Applying drag to the ship (not yet implemented)
+		- constants
+			- PLAYER_SPEED
+			- PLAYER_SIZE
+			- ship_height
+		- :)
 
 
 	Lingxiu

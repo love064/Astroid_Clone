@@ -8,7 +8,6 @@ Repository Link
 Codebase Oversight
 	- 
 
-
 Controls
 	- Use the mouse to click the start button
 	- Use left/right arrow keys to rotate the ship

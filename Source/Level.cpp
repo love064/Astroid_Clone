@@ -13,6 +13,10 @@ void Player::update(Level* level)
         PlaySoundMulti(level->thrust);
     }
 
+    if (IsKeyPressed(KEY_UP)) {
+        PlaySoundMulti(level->thrust);
+    }
+
     if (IsKeyDown(KEY_LEFT))
     {
         rotation += 5;
@@ -140,7 +144,7 @@ void Level::update() {
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
     asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(), [](Asteroid& a) { return a.dead; }), asteroids.end());
 
-    if (player.health <= 0) { //if time change to win screen with score
+    if (player.health <= 0) {
         reset();
     }
 }

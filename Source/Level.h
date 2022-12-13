@@ -43,8 +43,6 @@ public:
     Vector2 direction;
     float range = 150.f;
     bool dead = false;
-   
-    //Texture
     Texture2D missile;
     int rotation = 0;
 

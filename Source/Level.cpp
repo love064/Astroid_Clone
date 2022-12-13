@@ -75,6 +75,7 @@ void Player::render(Level* level)
 
 void Asteroid::update()
 {
+    /*
     if (position.y < radius || position.y > GetScreenHeight() - radius)
     {
         direction.y = -direction.y;
@@ -84,9 +85,29 @@ void Asteroid::update()
     {
         direction.x = -direction.x;
     }
-
+    */
     position.x += direction.x * ASTEROIDS_SPEED * DELTA;
     position.y += direction.y * ASTEROIDS_SPEED * DELTA;
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenWidth();
+
+    if (position.x > screenWidth + radius) //Right Wall
+    {
+        position.x = -(radius);
+    }
+    else if (position.x < -(radius))   //Left Wall
+    {
+        position.x = screenWidth + radius;
+    }
+    if (position.y > (screenHeight + radius)) //Bottom Wall
+    {
+        position.y = -(radius);
+    }
+    else if (position.y < -(radius))  //Top Wall
+    {
+        position.y = screenHeight + radius;
+    }
 }
 
 void Asteroid::render()

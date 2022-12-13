@@ -140,7 +140,7 @@ void Level::update() {
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
     asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(), [](Asteroid& a) { return a.dead; }), asteroids.end());
 
-    if (player.health <= 0) { //if times change to win screen with score
+    if (player.health <= 0) { //if time change to win screen with score
         reset();
     }
 }
@@ -148,7 +148,26 @@ void Level::update() {
 void Level::render() {
     DrawText("Level", 30, 30, 50, RED);
     DrawText(TextFormat("Points: %4i", points), 30, 75, 32, RED);
+    DrawText("Lives:", GetScreenWidth() - 208, 40, 32, RED);
+    
+    int rotation = 0;
+    Vector2 origin = { 97.f / 2.f, 83.f / 2.f };
+    Rectangle sourceRec = { 565.f, 58.f, 97.f, 83.f };
+    Rectangle destRec = { GetScreenWidth() - 128, 32, 32.f, 32.f};
+    if (player.health >= 1) {
+        DrawTexturePro(projectile_texture, sourceRec, destRec, origin, (float)rotation -180, WHITE);
 
+        if (player.health >= 2) {
+            Rectangle destRec2 = { GetScreenWidth() - 96, 32, 32.f, 32.f };
+            DrawTexturePro(projectile_texture, sourceRec, destRec2, origin, (float)rotation - 180, WHITE);
+
+            if (player.health >= 3) {
+                Rectangle destRec2 = { GetScreenWidth() - 64, 32, 32.f, 32.f };
+                DrawTexturePro(projectile_texture, sourceRec, destRec2, origin, (float)rotation - 180, WHITE);
+            }
+        }
+    }
+    
     player.render(this);
 
     for (Projectile& p : projectiles) {

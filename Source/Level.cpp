@@ -66,7 +66,7 @@ void Player::render(Level* level)
     Vector2 origin = { 97.f/2.f, 83.f/2.f };
     Rectangle sourceRec = { 565.f, 58.f, 97.f, 83.f };
     Rectangle destRec = { position.x, position.y, 97.f, 83.f };
-    DrawTexturePro(level->projectile_texture, sourceRec, destRec, origin, (float)-rotation - 90.f, WHITE);//*/
+    DrawTexturePro(level->projectile_texture, sourceRec, destRec, origin, (float)-rotation - 90.f, WHITE);
 }
 
 
@@ -199,7 +199,7 @@ void Level::spawn_projectile(Vector2 position, Vector2 direction, int rotation) 
     projectiles.push_back(projectile);
 }
 
-float distance_sq(Vector2 a, Vector2 b) { //add to my_math 
+float distance_sq(Vector2 a, Vector2 b) {
     float dx = a.x - b.x;
     float dy = a.y - b.y;
 

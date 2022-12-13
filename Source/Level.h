@@ -25,7 +25,6 @@ class Asteroid
 {
 public:
     Vector2 position = {};
-    Vector2 speed;
     Vector2 direction;
     float radius = 100;
     bool dead = false;

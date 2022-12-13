@@ -5,8 +5,8 @@ Group 11
 Repository Link
 	https://github.com/love064/Astroid_Clone 
 
-Code Oversight
-	-
+Codebase Oversight
+	- 
 
 
 Controls
@@ -26,4 +26,24 @@ Contribution
 
 
 	Love
-		- 
+		- Game states
+			- do_main_menu()
+			- do_game()
+		- Textures
+		- Sounds
+		- Player(update) (only parts bellow)
+			-> shooting
+			-> damage
+		- Projectile class
+			- Projectile(update)
+			- Projectile(render)
+		- Level class
+			- Level(update)
+			- Level(render)
+			- Level(spawn_projectiles)
+			- Level(closest_asteroid)
+			- Level(reset)
+		- distance_sq
+		- constants
+			- DELTA
+			- PROJECTILE_SPEED

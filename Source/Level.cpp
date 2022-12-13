@@ -10,7 +10,6 @@ void Player::update(Level* level)
     {
         position.x += (speed.x * PLAYER_SPEED);
         position.y -= (speed.y * PLAYER_SPEED);
-        PlaySoundMulti(level->thrust);
     }
 
     if (IsKeyPressed(KEY_UP)) {

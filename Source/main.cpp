@@ -42,7 +42,7 @@ void do_main_menu() //Main Menu
     
     //Title
     int title_font = 50;
-    int title_x = (GetScreenWidth() / 4) - 50;
+    int title_x = (GetScreenWidth() / 2) - 192;
     int title_y = (GetScreenHeight() * 0.25);
     DrawText("ASTEROID CLONE", title_x, title_y, title_font, RED);
 
@@ -136,6 +136,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
     StopSoundMulti();
     UnloadSound(level.thrust);
+    UnloadSound(level.explosion);
+    UnloadSound(level.pew);
     CloseAudioDevice();
 
     CloseWindow();        // Close window and OpenGL context

@@ -22,7 +22,6 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-#include "Constants.h"
 #include "Level.h"
 #include <stack>
 
@@ -38,8 +37,6 @@ std::stack<State> states;
 
 void do_main_menu() //Main Menu 
 {
-    Vector2 mouse_pos = GetMousePosition();
-    
     //Title
     int title_font = 50;
     int title_x = (GetScreenWidth() / 2) - 192;
@@ -57,7 +54,7 @@ void do_main_menu() //Main Menu
     
     bool btn_action = false;
 
-    if (CheckCollisionPointRec(mouse_pos, btnbounds))
+    if (CheckCollisionPointRec(GetMousePosition(), btnbounds))
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             states.push(State::GAME);
@@ -86,8 +83,7 @@ int main(void)
     InitAudioDevice();
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
-
+    
     Level level;
 
     level.projectile_texture    = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
@@ -101,6 +97,7 @@ int main(void)
     SetSoundVolume(level.pew, 0.5f);
 
     states.push(State::MAIN_MENU);
+    //--------------------------------------------------------------------------------------
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key

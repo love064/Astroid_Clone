@@ -75,36 +75,25 @@ void Player::render(Level* level)
 
 void Asteroid::update()
 {
-    /*
-    if (position.y < radius || position.y > GetScreenHeight() - radius)
-    {
-        direction.y = -direction.y;
-    }
-
-    if (position.x < radius || position.x > GetScreenWidth() - radius)
-    {
-        direction.x = -direction.x;
-    }
-    */
     position.x += direction.x * ASTEROIDS_SPEED * DELTA;
     position.y += direction.y * ASTEROIDS_SPEED * DELTA;
 
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenWidth();
 
-    if (position.x > screenWidth + radius) //Right Wall
+    if (position.x > screenWidth + radius) //Done to keep asteroids inbounds (changed from wall boucnign to be more dynamic/accurate)
     {
         position.x = -(radius);
     }
-    else if (position.x < -(radius))   //Left Wall
+    else if (position.x < -(radius)) 
     {
         position.x = screenWidth + radius;
     }
-    if (position.y > (screenHeight + radius)) //Bottom Wall
+    if (position.y > (screenHeight + radius))
     {
         position.y = -(radius);
     }
-    else if (position.y < -(radius))  //Top Wall
+    else if (position.y < -(radius)) 
     {
         position.y = screenHeight + radius;
     }
@@ -127,7 +116,7 @@ void Projectile::update(Level* level) {
         dead = true;
     }
 
-    //if collision with astroid die
+    //if collision with astroid both should die
     Asteroid* target_asteroid = level->closest_asteroid(position, range);
     
     if (target_asteroid)
@@ -160,7 +149,7 @@ void Level::update() {
         p.update(this);
     }
 
-    //erasing everything from the vector which is dead == true
+    //erasing everything from the vector which is dead (dead == true, or health == 0)
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(), [](Projectile& p) { return p.dead; }), projectiles.end());
     asteroids.erase(std::remove_if(asteroids.begin(), asteroids.end(), [](Asteroid& a) { return a.dead; }), asteroids.end());
 
@@ -178,7 +167,7 @@ void Level::render() {
     Vector2 origin = { 97.f / 2.f, 83.f / 2.f };
     Rectangle sourceRec = { 565.f, 58.f, 97.f, 83.f };
     Rectangle destRec = { GetScreenWidth() - 128, 32, 32.f, 32.f};
-    if (player.health >= 1) {
+    if (player.health >= 1) {                                       //visualization of lives
         DrawTexturePro(texture_sheet, sourceRec, destRec, origin, (float)rotation -180, WHITE);
 
         if (player.health >= 2) {
@@ -223,7 +212,7 @@ void Level::spawn_projectile(Vector2 position, Vector2 direction, int rotation) 
     projectiles.push_back(projectile);
 }
 
-float distance_sq(Vector2 a, Vector2 b) {
+float distance_sq(Vector2 a, Vector2 b) { //Needed for the closest_asteroid function
     float dx = a.x - b.x;
     float dy = a.y - b.y;
 

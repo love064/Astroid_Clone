@@ -26,7 +26,6 @@
 #include <stack>
 
 
-//Menu code
 enum class State
 {
     MAIN_MENU,
@@ -35,25 +34,21 @@ enum class State
 
 std::stack<State> states;
 
-void do_main_menu() //Main Menu 
+void do_main_menu()
 {
-    //Title
     int title_font = 50;
     int title_x = (GetScreenWidth() / 2) - 192;
     int title_y = (GetScreenHeight() * 0.25);
     DrawText("ASTEROID CLONE", title_x, title_y, title_font, RED);
 
-    //Button
-    int pos_x = (GetScreenWidth() / 2) - 25;
-    int pos_y = (GetScreenHeight() / 2) - 124;
+    int btn_x = (GetScreenWidth() / 2) - 25;
+    int btn_y = (GetScreenHeight() / 2) - 124;
     int start_font = 32;
-    DrawRectangle(pos_x, pos_y, 124, 64, GREEN);
-    DrawText("START", pos_x + 8, pos_y + 16, start_font, WHITE);
-
-    Rectangle btnbounds(pos_x, pos_y, 124, 64);
-    
     bool btn_action = false;
-
+    DrawRectangle(btn_x, btn_y, 124, 64, GREEN);
+    DrawText("START", btn_x + 8, btn_y + 16, start_font, WHITE);
+    Rectangle btnbounds(btn_x, btn_y, 124, 64);
+    
     if (CheckCollisionPointRec(GetMousePosition(), btnbounds))
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -92,9 +87,9 @@ int main(void)
     level.explosion = LoadSound("sounds/explosion.wav");
     level.pew = LoadSound("sounds/pew.wav");
 
-    SetSoundVolume(level.thrust, 0.5f);
-    SetSoundVolume(level.explosion, 0.5f);
-    SetSoundVolume(level.pew, 0.5f);
+    SetSoundVolume(level.thrust, 0.3f);
+    SetSoundVolume(level.explosion, 0.3f);
+    SetSoundVolume(level.pew, 0.3f);
 
     states.push(State::MAIN_MENU);
     //--------------------------------------------------------------------------------------

@@ -13,7 +13,7 @@ std::stack<State> states;
 void do_main_menu()
 {
     int title_font = 50;
-    int title_x = (GetScreenWidth() / 2) - 192;
+    int title_x = (GetScreenWidth() / 2) - 200;
     int title_y = (GetScreenHeight() * 0.25);
     DrawText("ASTEROID CLONE", title_x, title_y, title_font, RED);
 

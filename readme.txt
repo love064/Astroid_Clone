@@ -33,7 +33,6 @@ Contribution
 			- Player movement forward and rotation
 			- Player interaction with screen borders
 			- Function to render the player ship texture
-			- Applying drag to the ship (not yet implemented)
 		- Asteroids
 			- Asteroid interaction with screen borders
 		- constants

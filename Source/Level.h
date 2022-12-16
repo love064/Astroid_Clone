@@ -11,7 +11,6 @@ public:
     Vector2 position = { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f };
     Vector2 speed;
     float range = PLAYER_SIZE * 3.5;
-    int acceleration = 0;
     int rotation = 0;
     int health = 0; //set to zero to trigger level(reset) at the begining, which spawns in the asteroids and set health to 3
     

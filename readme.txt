@@ -16,7 +16,7 @@ Codebase Oversight
 			-> as well as the initialization of their functions
 		- Level.cpp
 			-> this file contains all of the functions with-in the classes (eg. Player(update), Level(spawn_projectile))
-			-> as well as supporting function(s) for these functions (distance_sq()) (fyi: there is only 1 supprting function like this therefore its in the same file and not a new "math" file)
+			-> as well as a supporting function for these functions (distance_sq()) (ps. there is only 1 supprting function like this therefore its in the same file and not a new "math" file)
 		- Constants.h
 			-> this file contains the constant values (const "float")
 

@@ -43,7 +43,7 @@ Contribution
 		- :)
 
 
-	Lingxiu
+	Lingxiu (left group)
 		- Asteroid(update)
 			-> movement
 

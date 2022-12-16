@@ -12,7 +12,7 @@ void Player::update(Level* level)
         position.y -= (speed.y * PLAYER_SPEED);
     }
 
-    if (IsKeyPressed(KEY_UP)) {
+    if (IsKeyPressed(KEY_UP)) {     //split from acceleration due to different IsKey___ commands (Down/Pressed), if not the sound spams
         PlaySoundMulti(level->thrust);
     }
 
@@ -33,34 +33,34 @@ void Player::update(Level* level)
         PlaySoundMulti(level->pew);
     }
 
-    //Wall interaction
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenWidth();
 
-    if (position.x > screenWidth + ship_height) //Right Wall
+    if (position.x > screenWidth + ship_height) //done to keep the player on the screen (if the player goes out of bounds they come back on the opposite side)
     {
         position.x = -(ship_height);
     }
-    else if (position.x < -(ship_height))   //Left Wall
+    else if (position.x < -(ship_height))
     {
         position.x = screenWidth + ship_height;
     }
-    if (position.y > (screenHeight + ship_height)) //Bottom Wall
+    if (position.y > (screenHeight + ship_height)) 
     {
         position.y = -(ship_height);
     }
-    else if (position.y < -(ship_height))  //Top Wall
+    else if (position.y < -(ship_height))
     {
         position.y = screenHeight + ship_height;
     }
 
-    //Damage
+    
     Asteroid* target_asteroid = level->closest_asteroid(position, range);
     if (target_asteroid)
     {
         target_asteroid->dead = true;
         health = health - 1;
-        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
+        level->spawn_asteroid({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) }); 
+        //asteroid destroyed and spawn_asteroid called to not get insta-killed and so the there are enough asteroids on screen
     }
 }
 
@@ -69,7 +69,7 @@ void Player::render(Level* level)
     Vector2 origin = { 97.f/2.f, 83.f/2.f };
     Rectangle sourceRec = { 565.f, 58.f, 97.f, 83.f };
     Rectangle destRec = { position.x, position.y, 97.f, 83.f };
-    DrawTexturePro(level->projectile_texture, sourceRec, destRec, origin, (float)-rotation - 90.f, WHITE);
+    DrawTexturePro(level->texture_sheet, sourceRec, destRec, origin, (float)-rotation - 90.f, WHITE);
 }
 
 
@@ -136,7 +136,7 @@ void Projectile::update(Level* level) {
         dead = true;
         level->points = level->points + 50;
         PlaySoundMulti(level->explosion);
-        level->spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
+        level->spawn_asteroid({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
     }
 }
 
@@ -179,15 +179,15 @@ void Level::render() {
     Rectangle sourceRec = { 565.f, 58.f, 97.f, 83.f };
     Rectangle destRec = { GetScreenWidth() - 128, 32, 32.f, 32.f};
     if (player.health >= 1) {
-        DrawTexturePro(projectile_texture, sourceRec, destRec, origin, (float)rotation -180, WHITE);
+        DrawTexturePro(texture_sheet, sourceRec, destRec, origin, (float)rotation -180, WHITE);
 
         if (player.health >= 2) {
             Rectangle destRec2 = { GetScreenWidth() - 96, 32, 32.f, 32.f };
-            DrawTexturePro(projectile_texture, sourceRec, destRec2, origin, (float)rotation - 180, WHITE);
+            DrawTexturePro(texture_sheet, sourceRec, destRec2, origin, (float)rotation - 180, WHITE);
 
             if (player.health >= 3) {
                 Rectangle destRec2 = { GetScreenWidth() - 64, 32, 32.f, 32.f };
-                DrawTexturePro(projectile_texture, sourceRec, destRec2, origin, (float)rotation - 180, WHITE);
+                DrawTexturePro(texture_sheet, sourceRec, destRec2, origin, (float)rotation - 180, WHITE);
             }
         }
     }
@@ -204,12 +204,12 @@ void Level::render() {
     }
 }
 
-void Level::spawn_asteroids(Vector2 position, Vector2 direction) {
+void Level::spawn_asteroid(Vector2 position, Vector2 direction) {
     Asteroid asteroid{};
 
     asteroid.position = position;
     asteroid.direction = direction;
-    asteroid.rock = projectile_texture;
+    asteroid.rock = texture_sheet;
     asteroids.push_back(asteroid);
 }
 
@@ -218,7 +218,7 @@ void Level::spawn_projectile(Vector2 position, Vector2 direction, int rotation) 
 
     projectile.position = position;
     projectile.direction = direction;
-    projectile.missile = projectile_texture;
+    projectile.missile = texture_sheet;
     projectile.rotation = rotation;
     projectiles.push_back(projectile);
 }
@@ -257,6 +257,6 @@ void Level::reset() {
 
     int numb_asteroid = 5;
     for (int i = 0; i < numb_asteroid; i++) { 
-        spawn_asteroids({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
+        spawn_asteroid({ (float)GetRandomValue(100, GetScreenWidth()), (float)GetRandomValue(100, GetScreenHeight()) }, { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight()) });
     }
 }

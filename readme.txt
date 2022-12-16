@@ -72,7 +72,7 @@ Contribution
 			- Level(update)
 			- Level(render)
 			- Level(spawn_projectile)
-			- Level(spawn_asteroids)
+			- Level(spawn_asteroid)
 			- Level(closest_asteroid)
 			- Level(reset)
 		- distance_sq

@@ -81,11 +81,11 @@ int main(void)
     
     Level level;
 
-    level.projectile_texture    = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
+    level.texture_sheet    = LoadTexture("Spritesheet/spaceShooter2_spritesheet.png");
    
-    level.thrust = LoadSound("sounds/space_ship_thurst.wav");
+    level.thrust    = LoadSound("sounds/space_ship_thurst.wav");
     level.explosion = LoadSound("sounds/explosion.wav");
-    level.pew = LoadSound("sounds/pew.wav");
+    level.pew       = LoadSound("sounds/pew.wav");
 
     SetSoundVolume(level.thrust, 0.3f);
     SetSoundVolume(level.explosion, 0.3f);
